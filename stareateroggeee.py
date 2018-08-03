@@ -155,11 +155,11 @@ while do:
                 moggeee = False
             elif event.key == pg.K_s:
                 mstars = False
-    if moggeee and starseaten >= 10:
-        starseaten -= 10
+    if moggeee and starseaten >= 5:
+        starseaten -= 5
         oggeees += 1
-    if mstars and oggeees >= 10:
-        oggeees -= 10
+    if mstars and oggeees >= 5:
+        oggeees -= 5
         starsn += 1
     while pause:
         for event in pg.event.get():
@@ -221,8 +221,8 @@ while do:
         vjrfg = 0
     else:
         vjrfg = starsn-49
-    info = ("O to make oggeees (10 klols). " +
-            "S to make stars (10 oggeees). " +
+    info = ("O to make oggeees (5 klols). " +
+            "S to make stars (5 oggeees). " +
             " H to prestige, works only when 50 or more stars. gives " +
             str(vjrfg) + " vjrf points.")
     itext = font.render(info, True, (255,255,255))
