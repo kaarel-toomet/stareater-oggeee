@@ -8,6 +8,7 @@ blap = pg.mixer.Sound("blap.wav")
 pic = pg.image.load("hullmyts.png")
 star = pg.image.load("star.png")
 cstar = pg.image.load("cyanstar.png")
+starc1 = pg.image.load("starclump1.png")
 pg.font
 screen = pg.display.set_mode((0,0), pg.RESIZABLE)
 screenw = screen.get_width()
@@ -136,7 +137,7 @@ while do:
                 starseaten = 0
                 oggeees = 0
             elif event.key == pg.K_m and starsn >= 100 and vjrf >= 100:
-                mstarsn += 1
+                mstarsn += min(starsn//100,vjrf//100)
                 starsn = 1
                 stars.empty()
                 starseaten = 0
