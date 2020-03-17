@@ -40,6 +40,7 @@ stars = pg.sprite.Group()
 mgstars = pg.sprite.Group()
 oggeees = 0
 starsn = 1
+tstars 1
 mstarsn = 0
 moggeee = False
 mstars = False
