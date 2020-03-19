@@ -37,13 +37,16 @@ gameover = False
 player = pg.sprite.GroupSingle()
 potatoes = pg.sprite.Group()
 stars = pg.sprite.Group()
+c1stars = pg.sprite.Group()
 mgstars = pg.sprite.Group()
-oggeees = 0
-starsn = 1
-tstars 1
+oggeees = 9999999999999
+starsn = 111
+tstars = starsn
+c1starsn = 0
 mstarsn = 0
 moggeee = False
 mstars = False
+compress = False
 vjrf = 0
 class Player(pg.sprite.Sprite):
     def __init__(self,x,y):
@@ -131,19 +134,27 @@ while do:
                 moggeee = True
             elif event.key == pg.K_s:
                 mstars = True
-            elif event.key == pg.K_h and starsn >= 50:
-                vjrf += starsn-49
+            elif event.key == pg.K_h and tstars >= 50:
+                vjrf += vjrfg
                 starsn = 1
+                tstars = 1
                 stars.empty()
+                c1stars.empty()
+                c1starsn = 0
                 starseaten = 0
                 oggeees = 0
-            elif event.key == pg.K_m and starsn >= 100 and vjrf >= 100:
+            elif event.key == pg.K_m and tstars >= 100 and vjrf >= 100:
                 mstarsn += min(starsn//100,vjrf//100)
                 starsn = 1
+                tstars = 0
                 stars.empty()
                 starseaten = 0
                 oggeees = 0
                 vjrf = 0
+                c1stars.empty()
+                c1starsn = 0
+            elif event.key == pg.K_c:
+                compress = True
         elif event.type == pg.KEYUP:
             if event.key == pg.K_UP:
                 mup = False
@@ -157,12 +168,20 @@ while do:
                 moggeee = False
             elif event.key == pg.K_s:
                 mstars = False
+            elif event.key == pg.K_c:
+                compress = False
     if moggeee and starseaten >= 5:
         starseaten -= 5
         oggeees += 1
     if mstars and oggeees >= 5:
         oggeees -= 5
         starsn += 1
+    if compress and oggeees >= 100 and starsn >= 5:
+        oggeees -= 100
+        starsn -= 5
+        c1starsn += 1
+        c1stars.add(Star(r.randint(10,screenw-30),r.randint(10,screenh-30),
+                                 r.randint(-10,10),r.randint(-10,10),starc1))
     while pause:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -219,10 +238,10 @@ while do:
     text_rect.centerx = screen.get_rect().centerx
     text_rect.y = 10
     screen.blit(text,text_rect)
-    if starsn < 50:
+    if tstars < 50:
         vjrfg = 0
     else:
-        vjrfg = starsn-49
+        vjrfg = tstars-49
     info = ("O to make oggeees (5 klols). " +
             "S to make stars (5 oggeees). " +
             " H to prestige, works only when 50 or more stars. gives " +
@@ -241,6 +260,8 @@ while do:
     player.update(mup,mdown, mleft, mright)
     player.draw(screen)
     stars.update()
+    c1stars.draw(screen)
+    c1stars.update()
     stars.draw(screen)
     mgstars.update()
     mgstars.draw(screen)
@@ -256,20 +277,21 @@ while do:
         starseaten += 100 + vjrf
         mgstars.remove(mcol)
         tick = 0
-        time = 600
         blip.play()
+    c1col = pg.sprite.spritecollide(hullmyts,c1stars,False)
+    if len(c1col) > 0:
+        starseaten += 5 + (vjrf/20)
+        c1stars.remove(c1col)
+        pop.play()
     if len(stars) < starsn:
         stars.add(Star(r.randint(20,screenw-100),r.randint(20,screenh-30),
                        r.randint(-10,10),r.randint(-10,10)))
     if len(mgstars) < mstarsn:
         mgstars.add(Star(r.randint(20,screenw-100),r.randint(20,screenh-30),
                        r.randint(-10,10),r.randint(-10,10),cstar))
-    if len(stars) > 0:
-        time -= 0
-    if time == 0:
-        time = 600
-        lifes -= 1
-        blip.play()
+    if c1starsn > len(c1stars):
+        c1stars.add(Star(r.randint(10,screenw-30),r.randint(10,screenh-30),
+                         r.randint(-10,10),r.randint(-10,10),starc1))
     pg.display.update()
     timer.tick(60)
 
